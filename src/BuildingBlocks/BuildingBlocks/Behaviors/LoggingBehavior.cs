@@ -28,5 +28,6 @@ public class LoggingBehavior<TRequest, TResponse>
 
         logger.LogInformation("[END] Handled {Request} with {Response}", typeof(TRequest).Name, typeof(TResponse).Name);
         return response;
+        
     }
 }
