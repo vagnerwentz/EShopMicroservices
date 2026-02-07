@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+  catalogdb:
+    container_name: catalogdb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgresABC@12345
+      - POSTGRES_DB=CatalogDb
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_catalog:/var/lib/postgresql
+  
+  catalog.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      # - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=CatalogDb;User Id=postgres;Password=postgresABC@12345;Include Error Detail=true
+      # - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/catalogapi.pfx
+      # - ASPNETCORE_Kestrel__Certificates__Default__Password=PRECISO VOLTAR A FAZER FUNCIONAR O HTTPS>
+    depends_on:
+      - catalogdb
+    ports:
+      - "6000:8080" # Usually HTTP
+      # - "6060:8081" # Usually HTTPs
+    volumes:
+      - ${HOME}/.microsoft/usersecrets:/home/app/.microsoft/usersecrets:ro
+      - ${HOME}/.aspnet/https:/home/app/.aspnet/https:ro
