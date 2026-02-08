@@ -12,6 +12,7 @@ services:
     build:
       context: .
       dockerfile: Services/Catalog/Catalog.API/Dockerfile
+      
   basket.api:
     image: ${DOCKER_REGISTRY-}basket.api
     build:
