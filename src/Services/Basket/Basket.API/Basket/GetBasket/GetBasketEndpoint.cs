@@ -16,9 +16,9 @@ public class GetBasketEndpoint : ICarterModule
             {
                 var result = await sender.Send(new GetBasketQuery(userName));
 
-                var respose = result.Adapt<GetBasketResponse>();
+                var response = result.Adapt<GetBasketResponse>();
 
-                return Results.Ok(respose);
+                return Results.Ok(response);
             })
             .WithName("GetProductById")
             .Produces<GetBasketResponse>(StatusCodes.Status200OK)
