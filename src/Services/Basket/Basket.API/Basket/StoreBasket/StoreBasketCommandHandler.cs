@@ -1,6 +1,3 @@
-using Basket.API.Basket.Data;
-using Basket.API.Models;
-using BuildingBlocks.CQRS;
 using FluentValidation;
 
 namespace Basket.API.Basket.StoreBasket;

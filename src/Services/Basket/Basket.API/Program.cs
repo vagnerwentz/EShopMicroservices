@@ -1,12 +1,10 @@
-using Basket.API.Basket.Data;
-using Basket.API.Models;
 using FluentValidation;
 using BuildingBlocks.Behaviors;
 using BuildingBlocks.Exceptions.Handler;
-using Carter;
 using HealthChecks.UI.Client;
-using Marten;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +26,18 @@ builder.Services.AddMarten(options =>
 }).UseLightweightSessions();
 
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
+// builder.Services.AddScoped<IBasketRepository>(provider =>
+// {
+//     var basketRepository = provider.GetRequiredService<BasketRepository>();
+//     return new CachedBasketRepository(basketRepository, provider.GetRequiredService<IDistributedCache>());
+// });
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    // options.InstanceName = "Basket";
+});
 
 //Cross-Cutting Services
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
